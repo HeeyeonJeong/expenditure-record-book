@@ -41,23 +41,32 @@ const initialExpense = {
 function expenseReducer(state, action) {
   switch (action.type) {
     case 'CREATE':
-      return state.data.concat(action.data);
+      return {
+        ...state,
+        data: state.data.concat(action.data),
+      };
     case 'UPDATE':
-      return state.data.map(expense =>
-        expense.id === action.id
-          ? {
-              ...expense,
-              expense: {
-                id: action.id,
-                title: action.title,
-                category: action.category,
-                amount: action.amount,
-              },
-            }
-          : expense
-      );
+      return {
+        ...state,
+        data: state.data.map(expense =>
+          expense.id === action.id
+            ? {
+                ...expense,
+                expense: {
+                  id: action.id,
+                  title: action.title,
+                  category: action.category,
+                  amount: action.amount,
+                },
+              }
+            : expense
+        ),
+      };
     case 'REMOVE':
-      return state.data.filter(expense => expense.id !== action.id);
+      return {
+        ...state,
+        data: state.data.filter(expense => expense.id !== action.id),
+      };
     case 'FILTER':
       return produce(state, draft => {
         draft.currentFilter = action.value;

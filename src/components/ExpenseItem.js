@@ -4,6 +4,7 @@ import { MdEdit, MdDelete } from 'react-icons/md';
 import Dialog from './Dialog';
 import { useExpenseDispatch } from '../ExpenseContext';
 import UseInput from '../UseInput';
+import options from '../option';
 
 const ExpenseItemBlock = styled.div`
   display: flex;
@@ -91,14 +92,6 @@ const Remove = styled.div`
 `;
 
 function ExpenseItem({ id, title, category, amount }) {
-  const options = [
-    { label: '식사', value: 'meal' },
-    { label: '식료품', value: 'food' },
-    { label: '교통', value: 'traffic' },
-    { label: '생활', value: 'life' },
-    { label: '의료', value: 'medical' },
-  ];
-
   const [inputs, onChange, reset] = UseInput();
   const dispatch = useExpenseDispatch();
 
