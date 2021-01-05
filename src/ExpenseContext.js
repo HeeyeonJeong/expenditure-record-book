@@ -1,45 +1,49 @@
 import React, { createContext, useContext, useReducer, useRef } from 'react';
+import produce from 'immer';
 
-const initialExpense = [
-  {
-    id: 1,
-    title: '용개반점',
-    category: 'meal',
-    amount: 7000,
-  },
-  {
-    id: 2,
-    title: '양배추',
-    category: 'food',
-    amount: 5000,
-  },
-  {
-    id: 3,
-    title: '택시비',
-    category: 'traffic',
-    amount: 20000,
-  },
-  {
-    id: 4,
-    title: '관리비',
-    category: 'life',
-    amount: 100000,
-  },
-  {
-    id: 5,
-    title: '병원 진료',
-    category: 'medical',
-    sub: '의료',
-    amount: 7000,
-  },
-];
+const initialExpense = {
+  data: [
+    {
+      id: 1,
+      title: '용개반점',
+      category: 'meal',
+      amount: 7000,
+    },
+    {
+      id: 2,
+      title: '양배추',
+      category: 'food',
+      amount: 5000,
+    },
+    {
+      id: 3,
+      title: '택시비',
+      category: 'traffic',
+      amount: 20000,
+    },
+    {
+      id: 4,
+      title: '관리비',
+      category: 'life',
+      amount: 100000,
+    },
+    {
+      id: 5,
+      title: '병원 진료',
+      category: 'medical',
+      amount: 7000,
+    },
+  ],
+  currentFilter: 'all',
+  filterCategory: [],
+};
 
 function expenseReducer(state, action) {
   switch (action.type) {
     case 'CREATE':
-      return state.concat(action.expense);
+      return state.data.concat(action.data);
     case 'UPDATE':
-      return state.map(expense =>
+      return state.data.map(expense =>
         expense.id === action.id
           ? {
               ...expense,
@@ -53,7 +57,14 @@ function expenseReducer(state, action) {
           : expense
       );
     case 'REMOVE':
-      return state.filter(expense => expense.id !== action.id);
+      return state.data.filter(expense => expense.id !== action.id);
+    case 'FILTER':
+      return produce(state, draft => {
+        draft.currentFilter = action.value;
+        draft.filterCategory = draft.data.filter(
+          expense => expense.category === action.value
+        );
+      });
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }
@@ -84,7 +95,7 @@ export default ExpenseProvider;
 export function useExpenseState() {
   const context = useContext(ExpenseStateContext);
   if (!context) {
-    throw new Error('Cannot find TodoProvider');
+    throw new Error('Cannot find ExpenseProvider');
   }
   return context;
 }
@@ -92,7 +103,7 @@ export function useExpenseState() {
 export function useExpenseDispatch() {
   const context = useContext(ExpenseDispatchContext);
   if (!context) {
-    throw new Error('Cannot find TodoProvider');
+    throw new Error('Cannot find ExpenseProvider');
   }
   return context;
 }
@@ -100,7 +111,7 @@ export function useExpenseDispatch() {
 export function useExpenseNextId() {
   const context = useContext(ExpenseNextIdContext);
   if (!context) {
-    throw new Error('Cannot find TodoProvider');
+    throw new Error('Cannot find ExpenseProvider');
   }
   return context;
 }

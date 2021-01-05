@@ -80,7 +80,7 @@ const FormBlock = styled.form`
 const ButtonGroup = styled.div`
   margin-top: 3rem;
   display: flex;
-  justify-content: flex-end;
+  flex-direction: row-reverse;
 `;
 
 const palatte = {
@@ -101,67 +101,72 @@ function Dialog({
   onConfirm,
   onCancle,
 }) {
+  const onSubmit = e => {
+    e.preventDefault();
+    onConfirm();
+  };
+
   if (!visible) return null;
 
   return (
     <DarkBackground>
       <DialogBlock>
         <h3>{text}</h3>
-
-        {onConfirm.name !== 'onRemove' ? (
-          <FormBlock>
+        <FormBlock onSubmit={onSubmit}>
+          {onConfirm.name !== 'onRemove' ? (
             <div>
-              <label htmlFor="title">내용</label>
-              <input
-                id="title"
-                type="text"
-                name="title"
-                value={title}
-                onChange={onChange}
-              />
+              <div>
+                <label htmlFor="title">내용</label>
+                <input
+                  id="title"
+                  type="text"
+                  name="title"
+                  value={title}
+                  onChange={onChange}
+                />
+              </div>
+              <div>
+                <label htmlFor="amount">금액</label>
+                <input
+                  id="amount"
+                  type="number"
+                  name="amount"
+                  value={amount}
+                  onChange={onChange}
+                />
+              </div>
+              <div>
+                <label htmlFor="category-select">카테고리</label>
+                <select
+                  id="category-select"
+                  name="category"
+                  value={category}
+                  onChange={onChange}
+                >
+                  <option defaultValue>전체</option>
+                  <option value="meal">식사</option>
+                  <option value="food">식료품</option>
+                  <option value="traffic">교통</option>
+                  <option value="life">생활</option>
+                  <option value="medical">의료</option>
+                </select>
+              </div>
             </div>
-            <div>
-              <label htmlFor="amount">금액</label>
-              <input
-                id="amount"
-                type="number"
-                name="amount"
-                value={amount}
-                onChange={onChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="category-select">카테고리</label>
-              <select
-                id="category-select"
-                name="category"
-                value={category}
-                onChange={onChange}
+          ) : null}
+          <ThemeProvider theme={{ palatte }}>
+            <ButtonGroup>
+              <Button
+                type="submit"
+                color={onConfirm.name === 'onRemove' ? 'red' : 'blue'}
               >
-                <option defaultValue>전체</option>
-                <option value="meal">식사</option>
-                <option value="food">식료품</option>
-                <option value="traffic">교통</option>
-                <option value="life">생활</option>
-                <option value="medical">의료</option>
-              </select>
-            </div>
-          </FormBlock>
-        ) : null}
-
-        <ThemeProvider theme={{ palatte }}>
-          <ButtonGroup>
-            <Button color="gray" onClick={onCancle}>
-              {cancleText}
-            </Button>
-            <Button
-              color={onConfirm.name === 'onRemove' ? 'red' : 'blue'}
-              onClick={onConfirm}
-            >
-              {confirmText}
-            </Button>
-          </ButtonGroup>
-        </ThemeProvider>
+                {confirmText}
+              </Button>
+              <Button color="gray" type="button" onClick={onCancle}>
+                {cancleText}
+              </Button>
+            </ButtonGroup>
+          </ThemeProvider>
+        </FormBlock>
       </DialogBlock>
     </DarkBackground>
   );

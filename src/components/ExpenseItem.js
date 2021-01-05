@@ -27,8 +27,7 @@ const CategoryBlock = styled.div`
   font-weight: bold;
   margin-right: 15px;
   ${props => {
-    const category = props.children;
-    switch (category) {
+    switch (props.category) {
       case 'meal':
         return css`
           background-color: #ffec99;
@@ -92,13 +91,21 @@ const Remove = styled.div`
 `;
 
 function ExpenseItem({ id, title, category, amount }) {
+  const options = [
+    { label: '식사', value: 'meal' },
+    { label: '식료품', value: 'food' },
+    { label: '교통', value: 'traffic' },
+    { label: '생활', value: 'life' },
+    { label: '의료', value: 'medical' },
+  ];
+
   const [inputs, onChange, reset] = UseInput();
   const dispatch = useExpenseDispatch();
 
   const onUpdate = () => {
     dispatch({
       type: 'UPDATE',
-      expense: {
+      data: {
         id,
         title,
         category,
@@ -134,7 +141,9 @@ function ExpenseItem({ id, title, category, amount }) {
   return (
     <ExpenseItemBlock>
       <div className="left">
-        <CategoryBlock>{category}</CategoryBlock>
+        <CategoryBlock category={category}>
+          {options.find(option => option.value === category).label}
+        </CategoryBlock>
         <Title>{title}</Title>
       </div>
       <div className="right">

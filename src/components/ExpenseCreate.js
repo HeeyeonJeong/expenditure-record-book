@@ -34,7 +34,7 @@ function ExpenseCreate() {
   const onCreate = () => {
     dispatch({
       type: 'CREATE',
-      expense: {
+      data: {
         id: nextId.current,
         title,
         category,

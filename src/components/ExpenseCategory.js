@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { useExpenseState } from '../ExpenseContext';
+import { useExpenseDispatch } from '../ExpenseContext';
 
 const ExpenseCategoryBlock = styled.div`
   border-bottom: 2px solid #e9ecef;
@@ -12,22 +12,21 @@ const ExpenseCategoryBlock = styled.div`
 `;
 
 function ExpenseCategory() {
-  const expenses = useExpenseState();
+  const dispatch = useExpenseDispatch();
 
-  const [value, setValue] = useState('');
-
-  const onChange = e => {
-    setValue(e.target.value);
+  const onFilter = e => {
+    dispatch({
+      type: 'FILTER',
+      value: e.target.value,
+    });
   };
-
-  const filterCategory = expenses.filter(expense => expense.category === value);
 
   return (
     <>
       <ExpenseCategoryBlock>
         카테고리별로 보기: &nbsp;
-        <select name="category" onChange={onChange} value={value}>
-          <option defaultValue>전체</option>
+        <select name="category" onChange={onFilter}>
+          <option value="all">전체</option>
           <option value="meal">식사</option>
           <option value="food">식료품</option>
           <option value="traffic">교통</option>

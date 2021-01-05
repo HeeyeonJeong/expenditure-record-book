@@ -10,16 +10,17 @@ const ExpenseListBlock = styled.div`
 `;
 
 function ExpenseList() {
-  const expenses = useExpenseState();
+  const { data, currentFilter, filterCategory } = useExpenseState();
+
   return (
     <ExpenseListBlock>
-      {expenses.map(expense => (
+      {(currentFilter === 'all' ? data : filterCategory).map(item => (
         <ExpenseItem
-          key={expense.id}
-          id={expense.id}
-          title={expense.title}
-          amount={expense.amount}
-          category={expense.category}
+          key={item.id}
+          id={item.id}
+          title={item.title}
+          amount={item.amount}
+          category={item.category}
         />
       ))}
     </ExpenseListBlock>

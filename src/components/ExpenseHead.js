@@ -28,8 +28,8 @@ const ExpenseHeadBlock = styled.div`
 `;
 
 function ExpenseHead() {
-  const expenses = useExpenseState();
-  const allAmount = expenses.reduce((prev, curr) => prev + curr.amount, 0);
+  const { data } = useExpenseState();
+  const allAmount = data.reduce((prev, curr) => prev + curr.amount, 0);
 
   const today = new Date();
   const dateString = today.toLocaleDateString('ko-KR', {
